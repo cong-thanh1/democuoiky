@@ -41,9 +41,11 @@
             this.btnPause = new System.Windows.Forms.Button();
             this.btnPrevious = new System.Windows.Forms.Button();
             this.playerVideo = new AxWMPLib.AxWindowsMediaPlayer();
+            this.dgvSelect = new System.Windows.Forms.DataGridView();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.playerVideo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSelect)).BeginInit();
             this.SuspendLayout();
             // 
             // label3
@@ -81,6 +83,7 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.White;
+            this.groupBox1.Controls.Add(this.dgvSelect);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label3);
@@ -210,6 +213,17 @@
             this.playerVideo.Size = new System.Drawing.Size(1131, 395);
             this.playerVideo.TabIndex = 14;
             // 
+            // dgvSelect
+            // 
+            this.dgvSelect.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.dgvSelect.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvSelect.Location = new System.Drawing.Point(876, 33);
+            this.dgvSelect.Name = "dgvSelect";
+            this.dgvSelect.RowHeadersWidth = 51;
+            this.dgvSelect.RowTemplate.Height = 24;
+            this.dgvSelect.Size = new System.Drawing.Size(240, 150);
+            this.dgvSelect.TabIndex = 14;
+            // 
             // frmVideo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -226,6 +240,7 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.playerVideo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSelect)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -243,5 +258,6 @@
         private System.Windows.Forms.Button btnPause;
         private System.Windows.Forms.Button btnPrevious;
         private AxWMPLib.AxWindowsMediaPlayer playerVideo;
+        private System.Windows.Forms.DataGridView dgvSelect;
     }
 }

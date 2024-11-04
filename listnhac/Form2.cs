@@ -23,7 +23,10 @@ namespace listnhac
 
         private void frmVideo_Load(object sender, EventArgs e)
         {
-            if (paths.Length > 0) LoadVideo(paths[currentVideoIndex]);
+            if (paths.Length > 0)
+            {
+                LoadVideo(paths[currentVideoIndex]);
+            }
         }
 
         private void LoadVideo(string videoPath)
@@ -58,7 +61,7 @@ namespace listnhac
         {
             if (this.Owner != null)
             {
-                this.Owner.Show(); // Show the previous form
+                this.Owner.Show();
             }
         }
     }

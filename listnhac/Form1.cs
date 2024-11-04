@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-
+using TagLib;
+using WMPLib;
 namespace listnhac
 {
     public partial class frmMedia : Form
@@ -195,15 +196,13 @@ namespace listnhac
                 UpdatePlaybackProgress();
             }
         }
-
-        private void Player_PlayStateChange(int NewState)
+       private void Player_PlayStateChange(int NewState)
         {
             if ((WMPLib.WMPPlayState)NewState == WMPLib.WMPPlayState.wmppsMediaEnded)
             {
                 PlayNextSong();
             }
         }
-       
 
         private void Player_MediaError(object pMediaObject)
         {
@@ -221,8 +220,11 @@ namespace listnhac
                 btnPlay.Text = "Play";
             }
         }
+        private void Player1_MediaError(object sender, AxWMPLib._WMPOCXEvents_MediaErrorEvent e)
+        {
 
-      
+        }
+
 
 
         // =======================
@@ -276,35 +278,44 @@ namespace listnhac
 
             if (isVideo)
             {
+                // Thêm cột cho Video
                 dgv.Columns.Add(new DataGridViewTextBoxColumn
                 {
-                    DataPropertyName = "Title",
+                    DataPropertyName = "Title",   // Đảm bảo đối tượng dữ liệu có thuộc tính "Title"
                     HeaderText = "Tên video",
                     Width = 200
                 });
                 dgv.Columns.Add(new DataGridViewTextBoxColumn
                 {
-                    DataPropertyName = "FilePath",
+                    DataPropertyName = "FilePath", // Đảm bảo đối tượng dữ liệu có thuộc tính "FilePath"
                     HeaderText = "Đường dẫn",
                     Width = 300
                 });
             }
             else
             {
+                // Thêm cột cho Bài hát
                 dgv.Columns.Add(new DataGridViewTextBoxColumn
                 {
-                    DataPropertyName = "Title",
+                    DataPropertyName = "Title",    // Đảm bảo đối tượng dữ liệu có thuộc tính "Title"
                     HeaderText = "Tên bài hát",
                     Width = 200
                 });
                 dgv.Columns.Add(new DataGridViewTextBoxColumn
                 {
-                    DataPropertyName = "Artist",
+                    DataPropertyName = "Artist",   // Đảm bảo đối tượng dữ liệu có thuộc tính "Artist"
                     HeaderText = "Ca sĩ",
                     Width = 150
                 });
+                dgv.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    DataPropertyName = "FilePath", // Thêm cột đường dẫn cho bài hát nếu cần
+                    HeaderText = "Đường dẫn",
+                    Width = 300
+                });
             }
 
+            // Gọi phương thức cấu hình style chung cho DataGridView
             ConfigureDataGridViewStyle(dgv);
         }
 
@@ -317,6 +328,7 @@ namespace listnhac
             dgv.AllowUserToDeleteRows = false;
             dgv.RowHeadersVisible = false;
 
+            // Thiết lập style cho DataGridView
             dgv.DefaultCellStyle.SelectionBackColor = Color.LightBlue;
             dgv.DefaultCellStyle.SelectionForeColor = Color.Black;
             dgv.BackgroundColor = Color.White;
@@ -378,10 +390,14 @@ namespace listnhac
                 {
                     foreach (string file in ofd.FileNames)
                     {
+                        // Sử dụng TagLib để lấy thông tin ca sĩ
+                        var fileTag = TagLib.File.Create(file);
+                        string artist = fileTag.Tag.FirstPerformer ?? "Unknown Artist"; // Nếu không có ca sĩ, đặt là "Unknown Artist"
+
                         Song newSong = new Song
                         {
-                            Title = System.IO.Path.GetFileNameWithoutExtension(file),
-                            Artist = "Unknown Artist",
+                            Title = fileTag.Tag.Title ?? System.IO.Path.GetFileNameWithoutExtension(file), // Lấy tên bài hát từ metadata, nếu không có thì lấy từ tên tệp
+                            Artist = artist,
                             FilePath = file
                         };
 
@@ -528,20 +544,12 @@ namespace listnhac
         {
             LoadVideos();
         }
-
-        private void dgvVideo_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void OpenVideoForm(string videoPath)
         {
-            if (e.RowIndex >= 0)
-            {
-                string selectedVideoPath = dgvVideo.Rows[e.RowIndex].Cells[0].Value.ToString();
-                frmVideo videoForm = new frmVideo(new string[] { selectedVideoPath })
-                {
-                    Owner = this 
-                };
-                videoForm.Show();
-                this.Hide();
-                }
-            }
+            frmVideo videoForm = new frmVideo(new string[] { videoPath });
+            videoForm.Owner = this; // Đặt frmMedia là form cha
+            videoForm.Show();
+        }
 
         private void cmpSortVideo_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -559,6 +567,29 @@ namespace listnhac
             BindVideoData();
         }
 
-       
+        private void dgvVideo_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                var cellValue = dgvVideo.Rows[e.RowIndex].Cells[1].Value;
+                if (cellValue != null && !string.IsNullOrEmpty(cellValue.ToString()))
+                {
+                    string videoPath = cellValue.ToString();
+                    frmVideo videoForm = new frmVideo(new string[] { videoPath });
+                    videoForm.Show(this);
+                    this.Hide();
+                }
+                else
+                {
+                    MessageBox.Show("Đường dẫn video không tồn tại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+        private void btnShowPlayer_Click(object sender, EventArgs e)
+        {
+            Player1.Visible = true; // Hiện player
+            Player1.BringToFront(); // Đưa player lên trên panel
+        }
+        
     }
 }

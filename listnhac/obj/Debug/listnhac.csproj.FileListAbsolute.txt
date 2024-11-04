@@ -158,3 +158,6 @@ C:\Users\THANH\source\repos\LuongTrieuVy-master\listnhac\obj\Debug\listnhac.Prop
 C:\Users\THANH\source\repos\LuongTrieuVy-master\listnhac\obj\Debug\listnhac.csproj.GenerateResource.cache
 C:\Users\THANH\source\repos\LuongTrieuVy-master\listnhac\obj\Debug\listnhac.csproj.CoreCompileInputs.cache
 C:\Users\THANH\source\repos\LuongTrieuVy-master\listnhac\obj\Debug\listnhac.csproj.Up2Date
+C:\Users\THANH\source\repos\LuongTrieuVy-master\listnhac\bin\Debug\TagLibSharp.dll
+C:\Users\THANH\source\repos\LuongTrieuVy-master\listnhac\bin\Debug\TagLibSharp.pdb
+C:\Users\THANH\source\repos\LuongTrieuVy-master\listnhac\bin\Debug\TagLibSharp.xml
